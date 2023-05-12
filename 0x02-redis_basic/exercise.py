@@ -10,7 +10,7 @@ UnionOfTypes = Union[str, bytes, int, float]
 
 def count_calls(method: Callable) -> Callable:
     """counting number of times cache class called"""
-    key =  method.__qualname__
+    key = method.__qualname__
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         """Wrapper method"""
@@ -18,13 +18,14 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwargs)
     return wrapper
 
+
 class Cache:
     """Writing strings to Redis"""
     def __init__(self):
         """ store an instance of the Redis client as a private variable"""
         self._redis = redis.Redis()
         self._redis.flushdb()
-    
+
     @count_calls
     def store(self, data: UnionOfTypes) -> str:
         """method should generate a random key (e.g. using uuid), store
